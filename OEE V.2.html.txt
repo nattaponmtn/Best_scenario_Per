@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Maintenance & OEE Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Analytical Blue & Teal -->
+    <!-- Application Structure Plan: A single-page, scrollable report with a top-down narrative. Part 1 focuses on the most recent monthly OEE performance. Part 2, the long-term analysis, starts with redesigned KPI cards. The core problem analysis visualization is now a Bubble Chart with a color-coded legend, which plots Frequency (x-axis) vs. Average Downtime (y-axis) and uses bubble size for Total Downtime. This directly addresses the user's need to see the relationship between frequency and severity instantly without interaction. -->
+    <!-- Visualization & Content Choices:
+        - Monthly KPIs (Inform/Compare): A grid of 9 styled HTML cards.
+        - 6-Month OEE Trends (Change): A multi-axis Line Chart (Chart.js).
+        - Long-Term KPIs (Inform): Redesigned, more visually appealing KPI cards.
+        - Long-Term Problem Analysis (Compare/Explore/Relationships): A Bubble Chart (Chart.js) is chosen to replace the interactive bar chart. It now uses distinct colors and a legend for each problem category, making it instantly readable without interaction.
+        - Detailed Analysis (Inform/Conclude): Styled HTML text blocks providing narrative context for the charts.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f0f4f8; }
+        .chart-container { position: relative; width: 100%; height: 350px; max-height: 450px; }
+        .card { background-color: white; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        .section-title { font-size: 1.5rem; font-weight: 700; color: #1e293b; border-bottom: 2px solid #0d9488; padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        .kpi-card { background-color: #ffffff; padding: 1rem; border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; text-align: center; }
+        .kpi-card h3 { font-weight: 600; color: #475569; font-size: 0.875rem; }
+        .kpi-card .value { font-weight: 700; color: #1e293b; font-size: 1.75rem; line-height: 1.2; }
+        .kpi-card .subtext { font-size: 0.75rem; }
+        .section-divider { border-top: 2px dashed #94a3b8; margin-top: 3rem; margin-bottom: 3rem; }
+    </style>
+</head>
+<body class="antialiased text-slate-700">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <!-- PART 1: Monthly OEE Report -->
+        <section id="monthly-report">
+            <header class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-900">รายงานประสิทธิภาพเครื่องคัดไข่ (OEE)</h1>
+                <p class="text-slate-600 mt-2 text-lg">สรุปผลการดำเนินงานประจำเดือน | มิถุนายน 2568</p>
+            </header>
+
+            <div class="card mb-8">
+                <h2 class="section-title">ภาพรวมผลการดำเนินงานประจำเดือน</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="kpi-card space-y-2">
+                        <h3>OEE</h3>
+                        <p class="value text-teal-600 text-4xl">52.32%</p>
+                        <p class="subtext text-green-600 font-semibold">▲ 5.76% (vs. 46.56% เดือนก่อน)</p>
+                    </div>
+                    <div class="kpi-card space-y-2">
+                        <h3>Availability</h3>
+                        <p class="value text-blue-600 text-4xl">83.98%</p>
+                        <p class="subtext text-red-500 font-semibold">▼ 0.98% (vs. 84.96% เดือนก่อน)</p>
+                    </div>
+                    <div class="kpi-card space-y-2">
+                        <h3>Performance</h3>
+                        <p class="value text-amber-600 text-4xl">62.45%</p>
+                        <p class="subtext text-green-600 font-semibold">▲ 7.43% (vs. 55.02% เดือนก่อน)</p>
+                    </div>
+                     <div class="kpi-card space-y-2">
+                        <h3>Quality</h3>
+                        <p class="value text-green-600 text-4xl">99.83%</p>
+                        <p class="subtext text-green-600 font-semibold">▲ 0.02% (vs. 99.81% เดือนก่อน)</p>
+                    </div>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="kpi-card">
+                        <h3>ประสิทธิภาพการผลิต (ฟอง/ชม.)</h3>
+                        <div class="grid grid-cols-2 gap-4 items-center mt-2">
+                            <div class="text-center">
+                                <p class="value text-2xl">37,467</p>
+                                <p class="subtext">เดือนนี้</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="value text-2xl text-slate-500">33,013</p>
+                                <p class="subtext">เดือนก่อน</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">Max Capacity: 60,000 ฟอง/ชม.</p>
+                    </div>
+                     <div class="kpi-card">
+                        <h3>เวลาคัดไข่เฉลี่ยต่อวัน</h3>
+                         <div class="grid grid-cols-2 gap-4 items-center mt-2">
+                            <div class="text-center">
+                                <p class="value text-2xl">06:13:28</p>
+                                <p class="subtext">เดือนนี้</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="value text-2xl text-slate-500">06:26:19</p>
+                                <p class="subtext">เดือนก่อน</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-green-600 font-semibold mt-2">ประสิทธิภาพดีขึ้น</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="section-title">แนวโน้ม OEE, A, P, Q และ Production Rate รายวัน</h2>
+                <p class="text-slate-600 mb-4 text-center max-w-3xl mx-auto">กราฟนี้แสดงความสัมพันธ์ของปัจจัยต่างๆ ในแต่ละวัน เพื่อวิเคราะห์ว่าอะไรคือสาเหตุที่แท้จริงของความผันผวน</p>
+                <div class="chart-container" style="height: 450px;">
+                    <canvas id="oeeTrendChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- PART 2: Long-Term Maintenance Analysis -->
+        <section id="long-term-report">
+             <header class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-900">เจาะลึกสาเหตุและแนวโน้มระยะยาว</h1>
+                <p class="text-slate-600 mt-2 text-lg">วิเคราะห์ข้อมูลการซ่อมบำรุงย้อนหลัง (ม.ค. 2565 - มิ.ย. 2568)</p>
+            </header>
+            
+            <section id="kpis-long-term" class="mb-10 p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+                <h3 class="text-xl font-semibold text-slate-700 mb-4 text-center">ภาพรวมสถิติระยะยาว</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-4 bg-slate-50 rounded-lg">
+                        <p class="text-4xl font-bold text-blue-600" id="total-events"></p>
+                        <p class="text-sm text-slate-500 mt-1">จำนวนเหตุการณ์ทั้งหมด</p>
+                    </div>
+                    <div class="text-center p-4 bg-slate-50 rounded-lg">
+                        <p class="text-4xl font-bold text-red-600" id="total-bd-time"></p>
+                        <p class="text-sm text-slate-500 mt-1">เวลารวมที่เครื่องหยุด (ชม.)</p>
+                    </div>
+                    <div class="text-center p-4 bg-slate-50 rounded-lg">
+                        <p class="text-4xl font-bold text-amber-600" id="avg-bd-time"></p>
+                        <p class="text-sm text-slate-500 mt-1">เวลาเฉลี่ยที่เครื่องหยุด (ชม./ครั้ง)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="problem-analysis" class="mb-10 card">
+                <div class="text-left mb-6">
+                    <h2 class="text-xl font-semibold text-slate-800">วิเคราะห์ความเสี่ยง: ความถี่ vs ความรุนแรงของปัญหา</h2>
+                    <p class="text-slate-500">กราฟนี้แสดงความสัมพันธ์ระหว่าง "ความถี่" (แกนนอน) และ "ความรุนแรง" (แกนตั้ง) ของแต่ละปัญหา ขนาดของวงกลมแสดงถึง "ผลกระทบโดยรวม" (เวลารวมที่หยุด) ทำให้เราสามารถจัดลำดับความสำคัญของปัญหาได้อย่างชัดเจน</p>
+                </div>
+                <div class="chart-container" style="height:500px;">
+                    <canvas id="problemRiskChart"></canvas>
+                </div>
+            </section>
+
+            <section id="detailed-analysis" class="card">
+                 <div class="text-left mb-4">
+                    <h2 class="text-xl font-semibold text-slate-800">บทวิเคราะห์โดยละเอียดสำหรับเครื่องคัดไข่</h2>
+                    <p class="text-slate-500">สรุปประเด็นสำคัญและข้อสังเกตที่ได้จากการวิเคราะห์ข้อมูลทั้งหมดที่เกี่ยวข้องกับเครื่องคัดไข่</p>
+                </div>
+                <div class="space-y-4 text-slate-700">
+                    <div class="p-4 bg-slate-100 rounded-lg">
+                        <h3 class="font-semibold text-lg">ประเด็นสำคัญโดยสรุป</h3>
+                        <ul class="list-disc list-inside mt-2 space-y-2 text-sm">
+                            <li><strong class="text-blue-600">ปัญหาที่พบบ่อยที่สุด:</strong> "ปัญหาในกระบวนการ" และ "อื่นๆ" เป็นกลุ่มปัญหาที่เกิดขึ้นบ่อยครั้งที่สุด</li>
+                            <li><strong class="text-amber-600">เวลาหยุดทำงานเฉลี่ยสูงสุด:</strong> "ปัญหาจากสัตว์" ยังคงเป็นสาเหตุที่ทำให้เครื่องหยุดทำงานเฉลี่ยนานที่สุดต่อครั้งอย่างมีนัยสำคัญ</li>
+                            <li><strong class="text-red-600">ปัญหาที่ส่งผลกระทบต่อเวลารวมสูงสุด:</strong> กลุ่มปัญหา "อื่นๆ" เป็นสาเหตุหลักที่ทำให้เกิดเวลาหยุดทำงานสะสมนานที่สุด ตามมาด้วย "ปัญหาในกระบวนการ" และ "ปัญหาเชิงกล"</li>
+                        </ul>
+                    </div>
+                     <div class="p-4 bg-slate-100 rounded-lg">
+                        <h3 class="font-semibold text-lg">ปัญหาในกระบวนการ vs ปัญหาเครื่องจักร</h3>
+                        <p class="text-sm mt-2">"ปัญหาในกระบวนการ" (Process Defects) เป็นหมวดหมู่ที่เกิดขึ้นบ่อยที่สุด แต่มีเวลาหยุดทำงานเฉลี่ยค่อนข้างต่ำ ชี้ให้เห็นว่าปัญหาเหล่านี้เป็นปัญหาทั่วไปที่สามารถแก้ไขได้อย่างรวดเร็ว ในทางกลับกัน "ปัญหาเชิงกล" และ "ปัญหาสายพาน" แม้จะเกิดน้อยกว่า แต่กลับเป็นสาเหตุสำคัญที่ทำให้เกิดการหยุดทำงานเป็นเวลานาน ซึ่งแสดงให้เห็นถึงผลกระทบที่รุนแรงของปัญหาประเภทนี้</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const THEME = {
+                PRIMARY: '#0d9488', // Teal
+                SECONDARY: '#2563eb', // Blue
+                ACCENT: '#f59e0b', // Amber
+                ERROR: '#dc2626', // Red
+                SLATE: '#475569',
+                LIGHT_SLATE: '#e2e8f0'
+            };
+
+            const chartTooltipConfig = { plugins: { tooltip: { callbacks: { title: (items) => Array.isArray(items[0].label) ? items[0].label.join(' ') : items[0].label } } } };
+
+            // --- DATA STORE ---
+            const monthlyOeeData = [
+                { date: '01/06', oee: 49.85, a: 90.49, p: 55.17, q: 99.84, prod_h: 33102 }, { date: '02/06', oee: 51.08, a: 87.07, p: 58.77, q: 99.83, prod_h: 35260 },
+                { date: '03/06', oee: 49.94, a: 81.76, p: 61.18, q: 99.85, prod_h: 36707 }, { date: '04/06', oee: 48.05, a: 83.47, p: 57.67, q: 99.81, prod_h: 34600 },
+                { date: '05/06', oee: 51.64, a: 83.55, p: 61.90, q: 99.85, prod_h: 37142 }, { date: '06/06', oee: 50.80, a: 82.65, p: 61.55, q: 99.85, prod_h: 36932 },
+                { date: '07/06', oee: 52.56, a: 83.56, p: 62.99, q: 99.86, prod_h: 37793 }, { date: '08/06', oee: 50.83, a: 90.09, p: 56.50, q: 99.86, prod_h: 33903 },
+                { date: '09/06', oee: 54.32, a: 87.07, p: 62.50, q: 99.82, prod_h: 37499 }, { date: '10/06', oee: 53.27, a: 85.88, p: 62.13, q: 99.84, prod_h: 37277 },
+                { date: '11/06', oee: 54.27, a: 86.97, p: 62.48, q: 99.87, prod_h: 37490 }, { date: '12/06', oee: 54.57, a: 84.98, p: 64.31, q: 99.85, prod_h: 38589 },
+                { date: '13/06', oee: 53.87, a: 83.87, p: 64.30, q: 99.88, prod_h: 38580 }, { date: '14/06', oee: 52.63, a: 83.93, p: 62.80, q: 99.85, prod_h: 37683 },
+                { date: '15/06', oee: 50.98, a: 83.19, p: 61.39, q: 99.82, prod_h: 36837 }, { date: '16/06', oee: 45.18, a: 74.38, p: 60.85, q: 99.82, prod_h: 36511 },
+                { date: '17/06', oee: 50.99, a: 79.05, p: 64.60, q: 99.86, prod_h: 38762 }, { date: '18/06', oee: 52.82, a: 85.18, p: 62.10, q: 99.86, prod_h: 37258 },
+                { date: '19/06', oee: 47.03, a: 79.72, p: 59.11, q: 99.81, prod_h: 35468 }, { date: '20/06', oee: 55.21, a: 82.55, p: 67.01, q: 99.80, prod_h: 40207 },
+                { date: '21/06', oee: 54.77, a: 83.69, p: 65.56, q: 99.81, prod_h: 39337 }, { date: '22/06', oee: 54.68, a: 82.94, p: 66.03, q: 99.83, prod_h: 39619 },
+                { date: '23/06', oee: 58.13, a: 87.09, p: 66.87, q: 99.83, prod_h: 40120 }, { date: '24/06', oee: 56.55, a: 86.06, p: 65.80, q: 99.86, prod_h: 39479 },
+                { date: '25/06', oee: 55.46, a: 81.50, p: 68.20, q: 99.78, prod_h: 40920 }, { date: '26/06', oee: 46.68, a: 87.23, p: 53.61, q: 99.82, prod_h: 32166 },
+                { date: '27/06', oee: 52.60, a: 79.77, p: 66.10, q: 99.77, prod_h: 39658 }, { date: '28/06', oee: 53.43, a: 82.68, p: 64.73, q: 99.83, prod_h: 38841 },
+                { date: '29/06', oee: 54.75, a: 83.80, p: 65.44, q: 99.84, prod_h: 39263 },
+                { date: '30/06', oee: 52.53, a: 85.27, p: 61.70, q: 99.84, prod_h: 37022 }
+            ];
+            const longTermReportData = {
+                kpis: { totalEvents: 291, totalBdTime: 110.88, avgBdTime: 0.38 },
+                problems: [
+                    { category: 'อื่นๆ', freq: 122, totalBd: 33.27, avgBd: 0.27, analysis: 'กลุ่มปัญหาที่กระจัดกระจาย บางกรณีมีผลกระทบที่สูงเป็นรายครั้ง' },
+                    { category: 'ปัญหาในกระบวนการ', freq: 104, totalBd: 20.25, avgBd: 0.19, analysis: 'เป็นหมวดที่เกิดบ่อยที่สุด เช่น "ขนถาด" แม้แต่ละครั้งใช้เวลาน้อย แต่รวมแล้วกระทบเวลาโดยรวมมาก' },
+                    { category: 'ปัญหาเชิงกล', freq: 29, totalBd: 20.35, avgBd: 0.70, analysis: 'รวมปัญหาโซ่, เฟือง, Bucket ต้องการการดูแลเชิง Preventive' },
+                    { category: 'ปัญหาสายพาน', freq: 14, totalBd: 16.50, avgBd: 1.18, analysis: 'เกิดน้อยกว่า แต่มีระยะเวลาซ่อมเฉลี่ยสูง บ่งบอกถึงความรุนแรง โดยเฉพาะที่เล้า 2' },
+                    { category: 'การปรับตั้ง', freq: 11, totalBd: 11.40, avgBd: 1.04, analysis: 'การเซตอัป, ตั้งค่าเป็นส่วนหนึ่งของงาน แต่ควรลดเวลาให้สั้นลง' },
+                    { category: 'ปัญหาไฟฟ้า/ควบคุม', freq: 10, totalBd: 5.63, avgBd: 0.56, analysis: 'ระบบ Sensor, PLC, ควบคุม เกิดน้อยแต่ใช้เวลาซ่อมสูง' },
+                    { category: 'ปัญหาจากสัตว์', freq: 3, totalBd: 6.70, avgBd: 2.23, analysis: 'แม้เกิดน้อยมาก แต่ส่งผลรุนแรงและทำให้ BD TIME เฉลี่ยสูงมาก' }
+                ]
+            };
+
+            // --- PART 1: Monthly Report Charts ---
+            new Chart(document.getElementById('oeeTrendChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: monthlyOeeData.map(d => d.date),
+                    datasets: [
+                        { label: 'OEE (%)', data: monthlyOeeData.map(d => d.oee), borderColor: THEME.PRIMARY, yAxisID: 'yOEE', tension: 0.3, borderWidth: 3 },
+                        { label: 'Availability (%)', data: monthlyOeeData.map(d => d.a), borderColor: THEME.SECONDARY, yAxisID: 'yOEE', tension: 0.3, borderDash: [5, 5], hidden: true },
+                        { label: 'Performance (%)', data: monthlyOeeData.map(d => d.p), borderColor: THEME.ACCENT, yAxisID: 'yOEE', tension: 0.3, borderDash: [5, 5], hidden: true },
+                        { label: 'Quality (%)', data: monthlyOeeData.map(d => d.q), borderColor: THEME.SLATE, yAxisID: 'yQuality', tension: 0.3, hidden: true },
+                        { label: 'Product/H', data: monthlyOeeData.map(d => d.prod_h), type: 'bar', backgroundColor: 'rgba(37, 99, 235, 0.2)', yAxisID: 'yProdH' }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        yOEE: { type: 'linear', position: 'left', min: 40, max: 100, title: { display: true, text: 'A, P, OEE, Q (%)' } },
+                        yProdH: { type: 'linear', position: 'right', min: 25000, title: { display: true, text: 'ฟอง/ชั่วโมง' }, grid: { drawOnChartArea: false } },
+                        x: { ticks: { autoSkip: true, maxTicksLimit: 15 } }
+                    },
+                    plugins: { ...chartTooltipConfig.plugins, legend: { position: 'bottom' } }
+                }
+            });
+            
+            // --- PART 2: Long-Term Report Logic ---
+            document.getElementById('total-events').textContent = longTermReportData.kpis.totalEvents.toLocaleString();
+            document.getElementById('total-bd-time').textContent = longTermReportData.kpis.totalBdTime.toFixed(2);
+            document.getElementById('avg-bd-time').textContent = longTermReportData.kpis.avgBdTime.toFixed(2);
+
+            const problemRiskCtx = document.getElementById('problemRiskChart').getContext('2d');
+            const problemColors = [
+                'rgba(107, 114, 128, 0.7)', // Other
+                'rgba(37, 99, 235, 0.7)', // Process
+                'rgba(219, 39, 119, 0.7)', // Mechanical
+                'rgba(220, 38, 38, 0.7)', // Conveyor
+                'rgba(245, 158, 11, 0.7)', // Electrical
+                'rgba(100, 4, 142, 0.7)', // Adjustment
+                'rgba(21, 128, 61, 0.7)' // Animal
+            ];
+
+            const problemDataForChart = {
+                datasets: longTermReportData.problems.map((p, index) => ({
+                    label: p.category,
+                    data: [{
+                        x: p.freq,
+                        y: p.avgBd,
+                        r: Math.sqrt(p.totalBd) * 7 + 3, // Scale bubble radius
+                    }],
+                    backgroundColor: problemColors[index % problemColors.length]
+                }))
+            };
+
+            new Chart(problemRiskCtx, {
+                type: 'bubble',
+                data: problemDataForChart,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: 'ความถี่ (ครั้ง)' } },
+                        y: { title: { display: true, text: 'เวลาเฉลี่ยที่หยุด (ชม./ครั้ง)' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    const problem = longTermReportData.problems[context.datasetIndex];
+                                    return [
+                                        `ปัญหา: ${problem.category}`,
+                                        `ความถี่: ${problem.freq} ครั้ง`,
+                                        `เวลาเฉลี่ยที่หยุด: ${problem.avgBd.toFixed(2)} ชม.`,
+                                        `เวลารวมที่หยุด: ${problem.totalBd.toFixed(2)} ชม.`
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        });
+    </script>
+
+</body>
+</html>
